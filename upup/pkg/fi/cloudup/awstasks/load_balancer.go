@@ -494,7 +494,7 @@ func (_ *LoadBalancer) RenderAWS(t *awsup.AWSAPITarget, a, e, changes *LoadBalan
 			request.Listeners = append(request.Listeners, awsListener)
 		}
 
-		glog.V(2).Infof("Creating ELB with Name:%q", loadBalancerName)
+		fmt.Printf("[DEBUG] Creating ELB with Name: %q (%+v)\n", loadBalancerName, *request)
 
 		response, err := t.Cloud.ELB().CreateLoadBalancer(request)
 		if err != nil {
@@ -592,7 +592,7 @@ func (_ *LoadBalancer) RenderAWS(t *awsup.AWSAPITarget, a, e, changes *LoadBalan
 				request.Listeners = append(request.Listeners, awsListener)
 			}
 
-			glog.V(2).Infof("Creating LoadBalancer listeners")
+			fmt.Printf("[DEBUG] Creating LoadBalancer listeners %+v\n", *request)
 
 			_, err = t.Cloud.ELB().CreateLoadBalancerListeners(request)
 			if err != nil {

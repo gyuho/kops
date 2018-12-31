@@ -144,7 +144,7 @@ func BuildCAX509Template() *x509.Certificate {
 		KeyUsage:              x509.KeyUsageCertSign | x509.KeyUsageCRLSign,
 		ExtKeyUsage:           []x509.ExtKeyUsage{},
 		BasicConstraintsValid: true,
-		IsCA: true,
+		IsCA:                  true,
 	}
 	return template
 }
@@ -726,7 +726,7 @@ func mirrorSSHCredential(cluster *kops.Cluster, basedir vfs.Path, sshCredential 
 }
 
 func (c *VFSCAStore) IssueCert(signer string, id string, serial *big.Int, privateKey *pki.PrivateKey, template *x509.Certificate) (*pki.Certificate, error) {
-	glog.Infof("Issuing new certificate: %q", id)
+	glog.Infof("Issuing new certificate: %q [template.IsCA %v]", id, template.IsCA)
 
 	template.SerialNumber = serial
 
@@ -775,6 +775,7 @@ func (c *VFSCAStore) StoreKeypair(name string, cert *pki.Certificate, privateKey
 	}
 
 	{
+		fmt.Println("storePrivateKey for:", name)
 		err := c.storePrivateKey(name, ki)
 		if err != nil {
 			return err
@@ -782,6 +783,7 @@ func (c *VFSCAStore) StoreKeypair(name string, cert *pki.Certificate, privateKey
 	}
 
 	{
+		fmt.Println("storeCertificate for:", name)
 		err := c.storeCertificate(name, ki)
 		if err != nil {
 			// TODO: Delete private key?

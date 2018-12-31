@@ -1140,6 +1140,7 @@ func RunCreateCluster(f *util.Factory, out io.Writer, c *CreateClusterOptions) e
 		return err
 	}
 
+	fmt.Printf("RunCreateCluster CreateClusterOptions before PerformAssignments: %+v\n", *c)
 	err = cloudup.PerformAssignments(cluster)
 	if err != nil {
 		return fmt.Errorf("error populating configuration: %v", err)

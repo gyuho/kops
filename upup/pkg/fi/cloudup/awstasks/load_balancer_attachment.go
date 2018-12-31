@@ -127,6 +127,7 @@ func (_ *LoadBalancerAttachment) RenderAWS(t *awsup.AWSAPITarget, a, e, changes 
 		request.LoadBalancerNames = aws.StringSlice([]string{loadBalancerName})
 
 		glog.V(2).Infof("Attaching autoscaling group %q to ELB %q", fi.StringValue(e.AutoscalingGroup.Name), loadBalancerName)
+		fmt.Println("[DEBUG] t.Cloud.Autoscaling().AttachLoadBalancers:", loadBalancerName)
 		_, err := t.Cloud.Autoscaling().AttachLoadBalancers(request)
 		if err != nil {
 			return fmt.Errorf("error attaching autoscaling group to ELB: %v", err)
@@ -137,6 +138,7 @@ func (_ *LoadBalancerAttachment) RenderAWS(t *awsup.AWSAPITarget, a, e, changes 
 		request.LoadBalancerName = aws.String(loadBalancerName)
 
 		glog.V(2).Infof("Attaching instance %q to ELB %q", fi.StringValue(e.Instance.ID), loadBalancerName)
+		fmt.Println("[DEBUG] t.Cloud.ELB().RegisterInstancesWithLoadBalancer:", loadBalancerName)
 		_, err := t.Cloud.ELB().RegisterInstancesWithLoadBalancer(request)
 		if err != nil {
 			return fmt.Errorf("error attaching instance to ELB: %v", err)
